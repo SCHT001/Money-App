@@ -1,7 +1,7 @@
 import { Transaction } from "@/types";
 import { transactionSchema } from "@/schema";
 import { useQuery } from "@tanstack/react-query";
-import getALlTrsnactions from "@/lib/api/transaction";
+import {getAllTransactions} from "@/lib/api/transaction";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -14,13 +14,13 @@ import {
 
 import { useRouter } from "next/router";
 
-const data = [
-	{ title: "Groceries", amount: 150.0 },
-	{ title: "Rent", amount: 1000.0 },
-	{ title: "Utilities", amount: 200.0 },
-	{ title: "Transportation", amount: 50.0 },
-	{ title: "Dining out", amount: 75.0 },
-];
+// const data = [
+// 	{ title: "Groceries", amount: 150.0 },
+// 	{ title: "Rent", amount: 1000.0 },
+// 	{ title: "Utilities", amount: 200.0 },
+// 	{ title: "Transportation", amount: 50.0 },
+// 	{ title: "Dining out", amount: 75.0 },
+// ];
 
 const AllTransactions = () => {
 
@@ -28,9 +28,9 @@ const AllTransactions = () => {
 
 	const queriedData = useQuery({
 		queryKey: ["transactions"],
-		queryFn: getALlTrsnactions,
+		queryFn: getAllTransactions,
 	});
-
+	const data=queriedData.data?.data || [];
 	
 	return (
 		<div className="flex flex-col justify-center items-center h-screen  ">
@@ -40,7 +40,7 @@ const AllTransactions = () => {
 					<CardHeader className="pl-0">Track your money</CardHeader>
 					<Button className="self-center" onClick={()=>{router.push('/addTransaction')}}>Add</Button>
 				</div>
-				{data.map((item, index) => {
+				{data.map((item:any, index:any) => {
 					return (
 						<Card key={index} className="w-full flex justify-between">
 							<div>

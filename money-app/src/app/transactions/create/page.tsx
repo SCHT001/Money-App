@@ -1,29 +1,16 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { Transaction } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionSchema } from "@/schema";
-import { useRouter } from "next/router";
-import { addTransaction } from "@/lib/api/transaction";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function AddTransaction() {
-	// const queriedData = useQuery({
-	// 	queryKey: ["transactions"],
-	// 	queryFn: () => addTransaction(data),
-	// });
-
 	const router = useRouter();
 	const transactionForm = useForm<Transaction>({
 		resolver: zodResolver(transactionSchema),
@@ -48,7 +35,10 @@ export default function AddTransaction() {
 					<Input
 						placeholder="Title"
 						type="text"
-						className={cn("",transactionForm.formState.errors.title ? "border-destructive" : "")}
+						className={cn(
+							"",
+							transactionForm.formState.errors.title ? "border-destructive" : ""
+						)}
 						defaultValue={""}
 						{...transactionForm.register("title")}
 					></Input>
