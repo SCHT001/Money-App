@@ -2,7 +2,6 @@
 
 import { Transaction } from "@/types";
 import { transactionSchema } from "@/schema";
-import { useQuery } from "@tanstack/react-query";
 import { getAllTransactions } from "@/lib/api/transaction";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +15,11 @@ import {
 import { useRouter } from "next/navigation";
 
 const data = [
-	{ title: "Groceries", amount: 150.0 },
-	{ title: "Rent", amount: 1000.0 },
-	{ title: "Utilities", amount: 200.0 },
-	{ title: "Transportation", amount: 50.0 },
-	{ title: "Dining out", amount: 75.0 },
+    { id: '1', title: "Groceries", amount: 150.0 },
+	{ id: '2', title: "Rent", amount: 1000.0 },
+    { id: '3', title: "Utilities", amount: 200.0 },
+    { id: '4', title: "Transportation", amount: 50.0 },
+    { id: '5', title: "Dining out", amount: 75.0 },
 ];
 
 const AllTransactions = () => {
@@ -42,13 +41,13 @@ const AllTransactions = () => {
 				</div>
 				{data.map((item: any, index: any) => {
 					return (
-						<Card key={index} className="w-full flex justify-between">
+						<Card key={index} className="w-full flex justify-between mb-3">
 							<div>
 								<CardTitle>{item.title}</CardTitle>
 								<CardContent>{item.amount} $ </CardContent>
 							</div>
 							<div className="flex flex-col gap-2">
-								<Button variant={"secondary"}>Edit</Button>
+								<Button variant={"secondary"} onClick={()=>{router.push(`/transactions/${item.id}/edit`)}}>Edit</Button>
 								<Button variant={"destructive"}>Delete</Button>
 							</div>
 						</Card>

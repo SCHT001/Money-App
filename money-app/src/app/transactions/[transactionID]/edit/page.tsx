@@ -1,23 +1,24 @@
 "use client";
 import { Card, CardTitle } from "@/components/ui/card";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { Transaction } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { transactionSchema } from "@/schema";
 import { useRouter } from "next/navigation";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function EditTransaction() {
+export default function EditTransaction(params: { params:{ transactionID: string }}) {
 	const router = useRouter();
 	const transactionForm = useForm<Transaction>({
 		resolver: zodResolver(transactionSchema),
 	});
 
+
+	console.log(params.params.transactionID)
 	const submitForm = () => {
+        router.push("/");
 		console.log("submitted");
 	};
 
