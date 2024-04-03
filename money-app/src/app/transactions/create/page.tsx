@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Label } from "@radix-ui/react-label";
 
 export default function AddTransaction() {
 	const router = useRouter();
@@ -20,18 +21,23 @@ export default function AddTransaction() {
 		},
 	});
 
-	transactionForm.reset();
-	const submitForm = (data: any) => {};
+	const submitForm = (data: any) => {
+		console.log("Submitted");
+		router.push("/");
+	};
 
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<Card className="w-[30%]">
-				<CardTitle>Add transaction</CardTitle>
+				<CardTitle className="pb-4">Add transaction</CardTitle>
 
 				<form
 					onSubmit={transactionForm.handleSubmit(submitForm)}
 					className="flex flex-col gap-2"
 				>
+					<label htmlFor="title" className="font-semibold">
+						Title
+					</label>
 					<Input
 						placeholder="Title"
 						type="text"
@@ -39,13 +45,22 @@ export default function AddTransaction() {
 							"",
 							transactionForm.formState.errors.title ? "border-destructive" : ""
 						)}
-						defaultValue={""}
 						{...transactionForm.register("title")}
 					></Input>
+
+					<label htmlFor="amount" className="font-semibold">
+						Amount
+					</label>
 
 					<Input
 						placeholder="Amount"
 						type="number"
+						className={cn(
+							"",
+							transactionForm.formState.errors.title
+								? "border-destructive "
+								: ""
+						)}
 						defaultValue={""}
 						{...transactionForm.register("amount")}
 					></Input>
