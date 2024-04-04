@@ -9,15 +9,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { useQuery } from "react-query";
+import { getAllTransactions } from "@/lib/api/transaction";
 
 export default function EditTransaction() {
 	const router = useRouter();
 	const params = useParams();
-	// console.log(params.transactionID);
+	console.log(params.transactionID);
+
+	useQuery({
+		queryKey: ['getTransaction'],
+		queryFn: getAllTransactions,
+		onSuccess:(a)=>{
+			const item=a.data.find((item: any) => item.id === params.transactionID);
+			console.log(item);
+			transactionForm.setValue('title',item.title)
+			transactionForm.setValue('amount',item.amount)
+		}
+	});
+
+	//filter the data to get the item with the id that matches the transactionID
 
 	const transactionForm = useForm<Transaction>({
 		resolver: zodResolver(transactionSchema),
 	});
+	
 
 	const submitForm = () => {
 		console.log("submitted");
@@ -40,6 +56,7 @@ export default function EditTransaction() {
 							transactionForm.formState.errors.title ? "border-destructive" : ""
 						)}
 						name="title"
+						
 					></Input>
 					<label htmlFor="title" className={cn(transactionForm.formState.errors.title?'text-destructive':'','block mb-2')}>{transactionForm.formState.errors.title?.message}</label>
 					<label htmlFor="amount" className="font-semibold ">
