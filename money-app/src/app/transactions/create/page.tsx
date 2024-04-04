@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { Transaction } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Label } from "@radix-ui/react-label";
+import { useMutation } from "react-query";
+import { addTransaction } from "@/lib/api/transaction";
 
 export default function AddTransaction() {
 	const router = useRouter();
@@ -21,11 +22,19 @@ export default function AddTransaction() {
 		},
 	});
 
-	const submitForm = (data: any) => {
-		console.log("Submitted");
-		router.push("/");
+	const submitForm = (data:Transaction) => {
+		mutation.mutate(data);
 	};
-
+	const mutation = useMutation({
+		mutationFn: addTransaction,
+		mutationKey: "addTransaction",
+		onSuccess: () => {
+			console.log('submitted');
+			router.push("/transactions");
+		}
+	},
+	);
+	console.log(transactionForm.formState.errors);
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<Card className="w-[30%]">
@@ -46,10 +55,15 @@ export default function AddTransaction() {
 							transactionForm.formState.errors.title ? "border-destructive" : ""
 						)}
 						{...transactionForm.register("title")}
-						name="title"
 					></Input>
-					<label htmlFor="title" className={cn(transactionForm.formState.errors.title?'text-destructive':'')}>{transactionForm.formState.errors.title?.message}</label>
-
+					<label
+						htmlFor="title"
+						className={cn(
+							transactionForm.formState.errors.title ? "text-destructive" : ""
+						)}
+					>
+						{transactionForm.formState.errors.title?.message}
+					</label>
 
 					<label htmlFor="amount" className="font-semibold">
 						Amount
@@ -66,12 +80,18 @@ export default function AddTransaction() {
 						)}
 						defaultValue={""}
 						{...transactionForm.register("amount")}
-						name="amount"
 					></Input>
-					<label htmlFor="amount" className={cn(transactionForm.formState.errors.amount?'text-destructive':'')}>{transactionForm.formState.errors.amount?.message}</label>
-
-					<Button type="submit">Submit</Button>
+					<label
+						htmlFor="amount"
+						className={cn(
+							transactionForm.formState.errors.amount ? "text-destructive" : ""
+						)}
+					>
+						{transactionForm.formState.errors.amount?.message}
+					</label>
+					<Button  onClick={transactionForm.handleSubmit(submitForm)}>Submit</Button>
 				</form>
+				
 			</Card>
 		</div>
 	);

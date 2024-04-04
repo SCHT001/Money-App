@@ -2,7 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAllTransactions } from "@/lib/api/transaction";
 import Link from "next/link";
+import { useQuery } from "react-query";
 
 const data = [
 	{ id: "1", title: "Groceries", amount: 150.0 },
@@ -13,6 +15,13 @@ const data = [
 ];
 
 const AllTransactions = () => {
+	const {data,isLoading} = useQuery({
+		queryKey: "transactions",
+		queryFn: getAllTransactions,
+	});
+	// console.log(query.data?.data);
+	
+
 	return (
 		<div className="flex flex-col justify-center items-center h-screen  ">
 			<Card className="p-5 w-[30%]">
@@ -23,7 +32,8 @@ const AllTransactions = () => {
 						<Button className="self-center">Add</Button>
 					</Link>
 				</div>
-				{data.map((item: any, index: any) => {
+				{isLoading?'Loading...':''}
+				{data?.data.map((item: any, index: any) => {
 					return (
 						<Card key={index} className="w-full flex justify-between mb-3">
 							<div>

@@ -12,17 +12,14 @@ import { useParams } from "next/navigation";
 
 export default function EditTransaction() {
 	const router = useRouter();
-	const params=useParams();
-	console.log(params.transactionID);
+	const params = useParams();
+	// console.log(params.transactionID);
 
 	const transactionForm = useForm<Transaction>({
 		resolver: zodResolver(transactionSchema),
 	});
 
-
-	// console.log(params.params.transactionID)
 	const submitForm = () => {
-        router.push("/");
 		console.log("submitted");
 	};
 
@@ -38,11 +35,14 @@ export default function EditTransaction() {
 						placeholder="Title"
 						{...transactionForm.register("title")}
 						type="text"
-						className={cn(" mb-2",
+						className={cn(
+							" mb-2",
 							transactionForm.formState.errors.title ? "border-destructive" : ""
 						)}
+						name="title"
 					></Input>
-					<label htmlFor="amount" className="font-semibold " >
+					<label htmlFor="title" className={cn(transactionForm.formState.errors.title?'text-destructive':'','block mb-2')}>{transactionForm.formState.errors.title?.message}</label>
+					<label htmlFor="amount" className="font-semibold ">
 						Amount
 					</label>
 					<Input
@@ -52,9 +52,12 @@ export default function EditTransaction() {
 						className={cn(
 							transactionForm.formState.errors.amount
 								? "border-destructive"
-								: "","mb-2"
+								: "",
+							"mb-2"
 						)}
+						name="amount"
 					></Input>
+					<label htmlFor="amount" className={cn(transactionForm.formState.errors.amount?'text-destructive':'','block bt-2')}>{transactionForm.formState.errors.amount?.message}</label>
 					<Button className="w-full mt-2">Submit</Button>
 				</form>
 			</Card>
