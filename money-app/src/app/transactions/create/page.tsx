@@ -46,7 +46,10 @@ export default function AddTransaction() {
 							transactionForm.formState.errors.title ? "border-destructive" : ""
 						)}
 						{...transactionForm.register("title")}
+						name="title"
 					></Input>
+					<label htmlFor="title" className={cn(transactionForm.formState.errors.title?'text-destructive':'')}>{transactionForm.formState.errors.title?.message}</label>
+
 
 					<label htmlFor="amount" className="font-semibold">
 						Amount
@@ -57,13 +60,15 @@ export default function AddTransaction() {
 						type="number"
 						className={cn(
 							"",
-							transactionForm.formState.errors.title
+							transactionForm.formState.errors.amount
 								? "border-destructive "
 								: ""
 						)}
 						defaultValue={""}
 						{...transactionForm.register("amount")}
+						name="amount"
 					></Input>
+					<label htmlFor="amount" className={cn(transactionForm.formState.errors.amount?'text-destructive':'')}>{transactionForm.formState.errors.amount?.message}</label>
 
 					<Button type="submit">Submit</Button>
 				</form>

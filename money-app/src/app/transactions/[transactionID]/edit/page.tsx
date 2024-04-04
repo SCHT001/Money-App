@@ -8,15 +8,19 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
 
-export default function EditTransaction(params: { params:{ transactionID: string }}) {
+export default function EditTransaction() {
 	const router = useRouter();
+	const params=useParams();
+	console.log(params.transactionID);
+
 	const transactionForm = useForm<Transaction>({
 		resolver: zodResolver(transactionSchema),
 	});
 
 
-	console.log(params.params.transactionID)
+	// console.log(params.params.transactionID)
 	const submitForm = () => {
         router.push("/");
 		console.log("submitted");
