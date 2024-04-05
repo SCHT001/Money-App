@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTransaction, getAllTransactions } from "@/lib/api/transaction";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
-// import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 const AllTransactions = () => {
 	const router = useRouter();
@@ -22,9 +22,8 @@ const AllTransactions = () => {
 			router.push("/");
 		},
 	});
-	if (isLoading) {
-		return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
-	}
+
+	useEffect(() => {}, [data]);
 	return (
 		<div className="flex flex-col justify-center items-center h-screen  ">
 			<Card className="p-5 w-[30%]">
@@ -35,7 +34,14 @@ const AllTransactions = () => {
 						<Button className="self-center">Add</Button>
 					</Link>
 				</div>
-				{isLoading ? "Loading..." : ""}
+				{isLoading ? (
+					<div className="flex gap-3 flex-col">
+						<Skeleton className="h-28 w-full" />
+						<Skeleton className="h-28 w-full" />
+					</div>
+				) : (
+					""
+				)}
 				{data?.map((item: any, index: any) => {
 					return (
 						<Card key={index} className="w-full flex justify-between mb-3">
