@@ -14,6 +14,13 @@ import {
 	transactionSchema,
 	transactionSchemaType,
 } from "@/schema";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
 
 export default function EditTransaction() {
 	//Initialize form
@@ -59,56 +66,63 @@ export default function EditTransaction() {
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<Card className="w-[30%]">
-				<form onSubmit={transactionForm.handleSubmit(onSubmit)}>
-					<CardTitle className="pb-4">Edit transaction</CardTitle>
-					<label htmlFor="title" className="font-semibold">
-						Title
-					</label>
-					<Input
-						placeholder="Title"
-						{...transactionForm.register("title")}
-						type="text"
-						className={cn(
-							" mb-2",
-							transactionForm.formState.errors.title ? "border-destructive" : ""
-						)}
-						name="title"
-					></Input>
-					<label
-						htmlFor="title"
-						className={cn(
-							transactionForm.formState.errors.title ? "text-destructive" : "",
-							"block mb-2"
-						)}
-					>
-						{transactionForm.formState.errors.title?.message}
-					</label>
-					<label htmlFor="amount" className="font-semibold ">
-						Amount
-					</label>
-					<Input
-						placeholder="Amount"
-						{...transactionForm.register("amount")}
-						type="number"
-						className={cn(
-							transactionForm.formState.errors.amount
-								? "border-destructive"
-								: "",
-							"mb-2"
-						)}
-						name="amount"
-					></Input>
-					<label
-						htmlFor="amount"
-						className={cn(
-							transactionForm.formState.errors.amount ? "text-destructive" : "",
-							"block bt-2"
-						)}
-					>
-						{transactionForm.formState.errors.amount?.message}
-					</label>
-					<Button className="w-full mt-2">Submit</Button>
-				</form>
+				<CardTitle className="pb-4">Edit transaction</CardTitle>
+
+				<Form {...transactionForm}>
+					<form onSubmit={transactionForm.handleSubmit(onSubmit)}>
+						<FormField
+							name="title"
+							control={transactionForm.control}
+							render={({ field }) => (
+								<>
+									<FormLabel>Title</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											placeholder="Title"
+											type="text"
+											className={
+												(cn(
+													"",
+													transactionForm.formState.errors.title
+														? "border-destructive"
+														: ""
+												),
+												"mb-2")
+											}
+											{...field}
+										></Input>
+									</FormControl>
+									<FormMessage>
+										{transactionForm.formState.errors.title?.message}
+									</FormMessage>
+								</>
+							)}
+						></FormField>
+						<FormField
+							name="amount"
+							render={({ field }) => (
+								<>
+									<FormLabel>Amount</FormLabel>
+									<Input
+										{...field}
+										placeholder="0"
+										type="number"
+										className={cn(
+											transactionForm.formState.errors.amount
+												? "border-destructive"
+												: ""
+										)}
+									></Input>
+									<FormMessage>
+										{transactionForm.formState.errors.amount?.message}
+									</FormMessage>
+								</>
+							)}
+						></FormField>
+						<Button className="w-full mt-2">Submit</Button>
+					</form>
+				</Form>
 			</Card>
 		</div>
 	);
