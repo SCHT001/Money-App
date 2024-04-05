@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useMutation } from "react-query";
 import { addTransaction } from "@/lib/api/transaction";
+import { useMutation } from "@tanstack/react-query";
 
 export default function AddTransaction() {
 	const router = useRouter();
@@ -22,19 +22,17 @@ export default function AddTransaction() {
 		},
 	});
 
-	const submitForm = (data:Transaction) => {
+	const submitForm = (data: Transaction) => {
 		mutation.mutate(data);
 	};
 	const mutation = useMutation({
 		mutationFn: addTransaction,
-		mutationKey: "addTransaction",
+		mutationKey: ["addTransaction"],
 		onSuccess: () => {
-			console.log('submitted');
+			console.log("submitted");
 			router.push("/transactions");
-		}
-	},
-	);
-	console.log(transactionForm.formState.errors);
+		},
+	});
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<Card className="w-[30%]">
@@ -89,9 +87,10 @@ export default function AddTransaction() {
 					>
 						{transactionForm.formState.errors.amount?.message}
 					</label>
-					<Button  onClick={transactionForm.handleSubmit(submitForm)}>Submit</Button>
+					<Button onClick={transactionForm.handleSubmit(submitForm)}>
+						Submit
+					</Button>
 				</form>
-				
 			</Card>
 		</div>
 	);

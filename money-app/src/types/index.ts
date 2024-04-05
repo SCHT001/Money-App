@@ -1,4 +1,4 @@
 export type Transaction = {
-    title:string;
-    amount:number;
+	title: string;
+	amount: number;
 };
