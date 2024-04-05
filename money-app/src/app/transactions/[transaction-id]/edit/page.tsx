@@ -1,19 +1,6 @@
 "use client";
-import { Card, CardTitle } from "@/components/ui/card";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { updateTransaction, getSingleTransaction } from "@/lib/api/transaction";
-import {
-	editTransactionSchemaType,
-	transactionSchema,
-	transactionSchemaType,
-} from "@/schema";
+import { Card, CardTitle } from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -21,8 +8,20 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { getSingleTransaction, updateTransaction } from "@/lib/api/transaction";
+import { cn } from "@/lib/utils";
+import {
+	editTransactionSchemaType,
+	transactionSchema,
+	transactionSchemaType,
+} from "@/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function EditTransaction() {
 	//Initialize form
@@ -38,7 +37,7 @@ export default function EditTransaction() {
 	const params = useParams();
 
 	// Query single transaction
-	const { data, isLoading, error } = useQuery({
+	const { data, isSuccess, error } = useQuery({
 		queryKey: ["getSingleTransaction"],
 		queryFn: () => {
 			return getSingleTransaction(params["transaction-id"]);
@@ -46,10 +45,12 @@ export default function EditTransaction() {
 	});
 
 	useEffect(() => {
-		transactionForm.setValue("amount", data?.amount || 0);
-		transactionForm.setValue("title", data?.title || "");
+		if (isSuccess && data) {
+			transactionForm.setValue("amount", data?.amount || 0);
+			transactionForm.setValue("title", data?.title || "");
+		}
 	}),
-		[];
+		[isSuccess, data];
 
 	const mutation = useMutation({
 		mutationFn: async (data: transactionSchemaType) => {
