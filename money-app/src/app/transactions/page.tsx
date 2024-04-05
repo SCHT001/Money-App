@@ -2,16 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAllTransactions } from "@/lib/api/transaction";
+import { deleteTransaction, getAllTransactions } from "@/lib/api/transaction";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const AllTransactions = () => {
+	const router = useRouter();
 	const { data, isLoading } = useQuery({
 		queryKey: ["transactions"],
 		queryFn: getAllTransactions,
 	});
-
+	const mutation = useMutation({
+		mutationKey: ["delete"],
+		mutationFn: deleteTransaction,
+		onSuccess: () => {
+			router.push("/");
+		},
+	});
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
@@ -39,7 +48,14 @@ const AllTransactions = () => {
 										Edit
 									</Button>
 								</Link>
-								<Button variant={"destructive"}>Delete</Button>
+								<Button
+									variant={"destructive"}
+									onClick={() => {
+										mutation.mutate(item.id);
+									}}
+								>
+									Delete
+								</Button>
 							</div>
 						</Card>
 					);

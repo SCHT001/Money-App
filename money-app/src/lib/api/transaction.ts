@@ -1,7 +1,7 @@
 import { editTransactionSchemaType, transactionSchemaType } from "@/schema";
 import { Transaction } from "@/types";
 import { client } from "../axios";
-import { AxiosResponse, HttpStatusCode } from "axios";
+import axios, { AxiosResponse, HttpStatusCode } from "axios";
 
 const ENDPOINT = "https://cms-3v4y.onrender.com/api/transaction";
 
@@ -29,9 +29,15 @@ const getSingleTransaction = async (id: string | string[]) => {
 	return response.data;
 };
 
+const deleteTransaction = async (id: string) => {
+	const response = await client.delete(`/transactions/${id}`);
+	return response.data;
+};
+
 export {
 	getAllTransactions,
 	addTransaction,
 	updateTransaction,
 	getSingleTransaction,
+	deleteTransaction,
 };
