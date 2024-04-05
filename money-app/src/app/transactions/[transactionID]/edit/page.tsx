@@ -1,39 +1,23 @@
 "use client";
 import { Card, CardTitle } from "@/components/ui/card";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Transaction } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
-import { useMutation, useQuery } from "react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { updateTransaction, getSingleTransaction } from "@/lib/api/transaction";
 import {
-	getAllTransactions,
-	updateTransaction,
-	addTransaction,
-} from "@/lib/api/transaction";
-import { editTransactionSchemaType, transactionSchema } from "@/schema";
+	editTransactionSchemaType,
+	transactionSchema,
+	transactionSchemaType,
+} from "@/schema";
+import { useEffect } from "react";
 
 export default function EditTransaction() {
-	const router = useRouter();
-	const params = useParams();
-	console.log(params.transactionID);
-
-	const query = useQuery({
-		queryKey: ["getTransaction"],
-		queryFn: getAllTransactions,
-		onSuccess: (a) => {
-			const item = a.data.find((item: any) => item.id === params.transactionID);
-			console.log(item);
-			transactionForm.setValue("title", item?.amount);
-			transactionForm.setValue("amount", item.amount);
-		},
-	});
-
-	//filter the data to get the item with the id that matches the transactionID
-
+	//Inittalize form
 	const transactionForm = useForm<editTransactionSchemaType>({
 		resolver: zodResolver(transactionSchema),
 		defaultValues: {
@@ -42,20 +26,36 @@ export default function EditTransaction() {
 		},
 	});
 
+	const router = useRouter();
+	const params = useParams();
+
+	// Query single transaction
+
+	const { data, isLoading, error } = useQuery({
+		queryKey: ["getSingleTransaction"],
+		queryFn: () => {
+			return getSingleTransaction(params.transactionID);
+		},
+	});
+
+	if (!isLoading) {
+		transactionForm.setValue("title", data?.title || "");
+		transactionForm.setValue("amount", data?.amount || 0);
+	}
+
 	const mutation = useMutation({
-		mutationFn: async (data: editTransactionSchemaType) => {
+		mutationFn: async (data: transactionSchemaType) => {
 			await updateTransaction(data);
 		},
-		mutationKey: "addTransaction",
+		mutationKey: ["addTransaction"],
 		onSuccess: () => {
-			console.log("submitted");
 			router.push("/transactions");
 		},
 	});
 
-	const onSubmit: SubmitHandler<editTransactionSchemaType> = (data) => {
-		console.log("submitted");
-		mutation.mutate(data);
+	const onSubmit: SubmitHandler<transactionSchemaType> = (formData) => {
+		const dataWithId = { ...formData, id: data?.id };
+		mutation.mutate(dataWithId);
 	};
 
 	return (
