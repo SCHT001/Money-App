@@ -14,10 +14,9 @@ import {
 	transactionSchema,
 	transactionSchemaType,
 } from "@/schema";
-import { useEffect } from "react";
 
 export default function EditTransaction() {
-	//Inittalize form
+	//Initialize form
 	const transactionForm = useForm<editTransactionSchemaType>({
 		resolver: zodResolver(transactionSchema),
 		defaultValues: {
@@ -30,11 +29,10 @@ export default function EditTransaction() {
 	const params = useParams();
 
 	// Query single transaction
-
 	const { data, isLoading, error } = useQuery({
 		queryKey: ["getSingleTransaction"],
 		queryFn: () => {
-			return getSingleTransaction(params.transactionID);
+			return getSingleTransaction(params["transaction-id"]);
 		},
 	});
 

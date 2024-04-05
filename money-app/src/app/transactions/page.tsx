@@ -5,8 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteTransaction, getAllTransactions } from "@/lib/api/transaction";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AllTransactions = () => {
 	const router = useRouter();
@@ -22,7 +23,7 @@ const AllTransactions = () => {
 		},
 	});
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
 	}
 	return (
 		<div className="flex flex-col justify-center items-center h-screen  ">
