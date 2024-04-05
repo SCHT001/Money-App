@@ -1,13 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { deleteTransaction, getAllTransactions } from "@/lib/api/transaction";
 import Link from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const AllTransactions = () => {
 	const router = useRouter();
@@ -15,15 +22,16 @@ const AllTransactions = () => {
 		queryKey: ["transactions"],
 		queryFn: getAllTransactions,
 	});
-	const mutation = useMutation({
+	const { mutate, isSuccess } = useMutation({
 		mutationKey: ["delete"],
 		mutationFn: deleteTransaction,
-		onSuccess: () => {
-			router.push("/");
-		},
 	});
 
-	useEffect(() => {}, [data]);
+	if (isSuccess) {
+		router.push("/");
+		toast("Item deleted sucessfully");
+	}
+
 	return (
 		<div className="flex flex-col justify-center items-center h-screen  ">
 			<Card className="p-5 w-[30%]">
@@ -55,10 +63,11 @@ const AllTransactions = () => {
 										Edit
 									</Button>
 								</Link>
+
 								<Button
 									variant={"destructive"}
 									onClick={() => {
-										mutation.mutate(item.id);
+										mutate(item.id);
 									}}
 								>
 									Delete

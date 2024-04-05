@@ -6,6 +6,7 @@ import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "sonner";
 
 // export const metadata: Metadata = {
 // 	title: "Create Next App",
@@ -21,7 +22,8 @@ export default function RootLayout({
 		<QueryClientProvider client={queryClient}>
 			<html lang="en">
 				<body className={`${inter.className} antialiased bg-slate-300 `}>
-					{children}
+					<main> {children}</main>
+					<Toaster></Toaster>
 				</body>
 			</html>
 		</QueryClientProvider>

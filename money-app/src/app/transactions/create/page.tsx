@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { addTransaction } from "@/lib/api/transaction";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
 	Form,
 	FormControl,
@@ -37,7 +38,8 @@ export default function AddTransaction() {
 		mutationFn: addTransaction,
 		mutationKey: ["addTransaction"],
 		onSuccess: () => {
-			console.log("submitted");
+			// console.log("submitted");
+			toast.success(`Transaction added successfully`);
 			router.push("/transactions");
 		},
 	});

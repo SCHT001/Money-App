@@ -21,6 +21,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 export default function EditTransaction() {
 	//Initialize form
@@ -43,10 +45,11 @@ export default function EditTransaction() {
 		},
 	});
 
-	if (!isLoading) {
-		transactionForm.setValue("title", data?.title || "");
+	useEffect(() => {
 		transactionForm.setValue("amount", data?.amount || 0);
-	}
+		transactionForm.setValue("title", data?.title || "");
+	}),
+		[];
 
 	const mutation = useMutation({
 		mutationFn: async (data: transactionSchemaType) => {
@@ -55,6 +58,7 @@ export default function EditTransaction() {
 		mutationKey: ["addTransaction"],
 		onSuccess: () => {
 			router.push("/transactions");
+			toast.success(`Transaction updated successfully`);
 		},
 	});
 
