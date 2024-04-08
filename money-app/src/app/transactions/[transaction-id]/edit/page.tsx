@@ -45,12 +45,11 @@ export default function EditTransaction() {
 	});
 
 	useEffect(() => {
-		if (isSuccess && data) {
-			transactionForm.setValue("amount", data?.amount || 0);
-			transactionForm.setValue("title", data?.title || "");
-		}
+		if (!data) return;
+		transactionForm.setValue("amount", data?.amount || 0);
+		transactionForm.setValue("title", data?.title || "");
 	}),
-		[isSuccess, data];
+		[data];
 
 	const mutation = useMutation({
 		mutationFn: async (data: transactionSchemaType) => {
@@ -95,7 +94,6 @@ export default function EditTransaction() {
 												),
 												"mb-2")
 											}
-											{...field}
 										></Input>
 									</FormControl>
 									<FormMessage>

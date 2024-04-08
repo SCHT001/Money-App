@@ -1,13 +1,21 @@
-import { AuthOptions } from "next-auth";
+import { client } from "@/lib/axios";
 import NextAuth from "next-auth/next";
-import Github from "next-auth/providers/github";
-export const authOptions: AuthOptions = {
+import CredentialsProvider from "next-auth/providers/credentials";
+const handler = NextAuth({
 	providers: [
-		Github({
-			clientId: process.env.GITHUB_ID || "",
-			clientSecret: process.env.GITHUB_SECRET || "",
+		CredentialsProvider({
+			name: "Credentials",
+			credentials: {},
+			async authorize(credentials, req) {
+				const resposne = await client.post("/auth/signIn", credentials);
+				console.log(resposne);
+				return resposne.data;
+			},
 		}),
 	],
-};
+	session: {
+		maxAge: 30 * 24 * 60 * 60,
+	},
+});
 
-export default NextAuth(authOptions);
+export { handler as GET, handler as POST };

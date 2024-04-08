@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { formSchema, formSchemaType } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 const Page = () => {
@@ -18,21 +18,20 @@ const Page = () => {
 			password: "",
 		},
 	});
-	const onSubmit: SubmitHandler<formSchemaType> = () => {
-		console.log("submitted");
-	};
 
-	// session check
-	const { data: session } = useSession();
-	if (session) {
-		console.log(session);
-	} else {
-		console.log("no session");
-	}
+	// sign in
+	const onSubmit: SubmitHandler<formSchemaType> = async () => {
+		const result = await signIn("credentials", {
+			redirect: false,
+			email: loginForm.getValues("email"),
+			password: loginForm.getValues("password"),
+		});
+		console.log(result);
+	};
 
 	return (
 		<div className="flex justify-center items-center h-screen">
-			<Card className="p-2 w-[20%]">
+			<Card className="p-2 w-96">
 				<CardTitle className="pb-4 text-center">Login</CardTitle>
 				<Form {...loginForm}>
 					<form onSubmit={loginForm.handleSubmit(onSubmit)}>
@@ -86,7 +85,13 @@ const Page = () => {
 									);
 								}}
 							></FormField>
-							<Button variant={"default"} className="w-full">
+							<Button
+								variant={"default"}
+								onClick={() => {
+									signIn;
+								}}
+								className="w-full"
+							>
 								Submit
 							</Button>
 						</div>
