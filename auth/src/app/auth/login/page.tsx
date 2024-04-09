@@ -5,12 +5,14 @@ import { Form, FormField, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { formSchema, formSchemaType } from "@/schema";
-import { mannualSignIn } from "@/services/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 const Page = () => {
+	useSession().status == "authenticated" && redirect("/auth/loggedIn");
+
 	// initialize form
 	const loginForm = useForm<formSchemaType>({
 		resolver: zodResolver(formSchema),
@@ -31,7 +33,11 @@ const Page = () => {
 	const onSubmit: SubmitHandler<formSchemaType> = async (
 		data: formSchemaType
 	) => {
-		mannualSignIn(data);
+		await signIn("credentials", {
+			email: data.email,
+			password: data.password,
+			callbackUrl: "http://localhost:3000/auth/loggedIn",
+		});
 	};
 
 	return (

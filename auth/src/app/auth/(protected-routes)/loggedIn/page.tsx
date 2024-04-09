@@ -12,7 +12,7 @@ const LoggedIn = () => {
 		<div className="flex justify-center items-center h-screen">
 			<Card className="p-5 flex flex-col gap-5">
 				<CardTitle>
-					You are logged in as {currentSession.data?.user?.name} |{" "}
+					You are logged in as {currentSession.data?.user?.email}
 					{currentSession.data?.user?.email}
 				</CardTitle>
 				<Button onClick={logOut}>Logout</Button>
