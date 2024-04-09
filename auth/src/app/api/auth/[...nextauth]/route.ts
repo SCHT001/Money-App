@@ -17,6 +17,7 @@ const handler = NextAuth({
 				return resposne.data;
 			},
 		}),
+
 		Google({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

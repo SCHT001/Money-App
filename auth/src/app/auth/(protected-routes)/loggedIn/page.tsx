@@ -2,19 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const LoggedIn = () => {
-	const router = useRouter();
-
+	const currentSession = useSession();
 	const logOut = () => {
 		signOut();
 	};
-	const currentSession = useSession();
-	if (currentSession.status == "unauthenticated") {
-		router.push("/auth/login");
-	}
-
 	return (
 		<div className="flex justify-center items-center h-screen">
 			<Card className="p-5 flex flex-col gap-5">
