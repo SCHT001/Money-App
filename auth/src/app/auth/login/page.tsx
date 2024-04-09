@@ -5,6 +5,7 @@ import { Form, FormField, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { formSchema, formSchemaType } from "@/schema";
+import { mannualSignIn } from "@/services/auth.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,13 +21,17 @@ const Page = () => {
 	});
 
 	// sign in
-	const onSubmit: SubmitHandler<formSchemaType> = async () => {
-		const result = await signIn("credentials", {
-			redirect: false,
-			email: loginForm.getValues("email"),
-			password: loginForm.getValues("password"),
+
+	const signWithGoogle = async () => {
+		await signIn("google", {
+			callbackUrl: "http://localhost:3000/auth/loggedIn",
 		});
-		console.log(result);
+	};
+
+	const onSubmit: SubmitHandler<formSchemaType> = async (
+		data: formSchemaType
+	) => {
+		mannualSignIn(data);
 	};
 
 	return (
@@ -85,18 +90,19 @@ const Page = () => {
 									);
 								}}
 							></FormField>
-							<Button
-								variant={"default"}
-								onClick={() => {
-									signIn;
-								}}
-								className="w-full"
-							>
+							<Button variant={"default"} type="submit" className="w-full">
 								Submit
 							</Button>
 						</div>
 					</form>
 				</Form>
+				<Button
+					variant={"default"}
+					className="w-full mt-5"
+					onClick={signWithGoogle}
+				>
+					SignIn with google
+				</Button>
 			</Card>
 		</div>
 	);
