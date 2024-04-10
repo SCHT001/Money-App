@@ -1,6 +1,6 @@
 type User = {
 	id: string;
-	name: string;
+	username: string;
 	email: string;
 	photo?: string;
 	password?: string;
@@ -8,6 +8,12 @@ type User = {
 
 export type RequestUserType = {
 	id?: string;
+	email: string;
+	password: string;
+};
+
+export type AddUserType = {
+	username: string;
 	email: string;
 	password: string;
 };
