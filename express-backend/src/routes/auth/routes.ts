@@ -1,12 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
-import { signIn } from "./controller";
+import { providerSignIn, signIn } from "./controller";
 // import User from "../../types/user.types";
 const prisma = new PrismaClient();
 const router = Router();
 
 router.post("/signIn", async (req, res) => {
-	signIn(req, res);
+	return signIn(req, res);
+});
+
+router.post("/provider/signIn", (req, res) => {
+	return providerSignIn(req, res);
 });
 
 export default router;

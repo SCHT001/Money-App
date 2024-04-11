@@ -16,5 +16,18 @@ export type AddUserType = {
 	username: string;
 	email: string;
 	password: string;
+	photo?: string;
+};
+
+// export type ProviderUserType = {
+// 	username: string;
+// 	email: string;
+// 	token: string;
+// };
+
+export type ProviderUserType = {
+	username: string;
+	email: string;
+	photo: string;
 };
 export default User;
