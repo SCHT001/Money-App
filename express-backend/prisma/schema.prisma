@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:2319@localhost:3306/velorona"
+  url      = env("DATABASE_URL")
 
 }
 
