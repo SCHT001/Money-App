@@ -49,6 +49,8 @@ export const signIn = async (req: Request, res: Response) => {
 
 		if (!user) return handelError(res, 404);
 
+		if (!user.password) return handelError(res, 401, "Invalid sign in method");
+
 		if (await bcrypt.compare(data.password, user?.password!)) {
 			const payload = {
 				username: user?.username,
