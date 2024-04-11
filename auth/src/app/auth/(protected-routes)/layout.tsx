@@ -8,7 +8,8 @@ const Layout = ({
 }: Readonly<{
 	children: React.ReactNode;
 }>) => {
-	useSession().status == "unauthenticated" && redirect("/auth/login");
+	const { data, status } = useSession();
+	status == "unauthenticated" && redirect("/auth/login");
 
 	return <div>{children}</div>;
 };

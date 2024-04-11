@@ -52,6 +52,8 @@ export const providerAddUser = (req: Request, res: Response) => {
 		const user = prisma.user.create({
 			data: data,
 		});
+
+		console.log(req.cookies);
 	} catch (error) {
 		handelError(res, 500, error);
 	}
