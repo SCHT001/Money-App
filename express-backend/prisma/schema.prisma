@@ -26,5 +26,5 @@ model User {
 model Token {
   token     String
   user_id   String @id
-  user   User   @relation(fields: [user_id], references: [id])
+  user   User   @relation(fields: [user_id], references: [id],onDelete: Cascade)
 }
