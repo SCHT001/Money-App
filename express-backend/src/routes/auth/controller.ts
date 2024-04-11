@@ -61,6 +61,9 @@ export const signIn = async (req: Request, res: Response) => {
 			// Store user token
 			await storeToken(user.id, token);
 
+			res.cookie("token", token, {
+				httpOnly: true,
+			});
 			return res.status(200).send({
 				status: "success",
 				data: {
@@ -96,6 +99,9 @@ export const providerSignIn = async (req: Request, res: Response) => {
 
 			const token = jwt.sign(payload, process.env.SECRET_KEY!);
 			await storeToken(newUser?.id, token);
+			res.cookie("token", token, {
+				httpOnly: true,
+			});
 			return res.status(201).send({
 				status: "success",
 				data: {
@@ -112,7 +118,9 @@ export const providerSignIn = async (req: Request, res: Response) => {
 			const token = jwt.sign(payload, process.env.SECRET_KEY!);
 
 			await storeToken(user.id, token);
-
+			res.cookie("token", token, {
+				httpOnly: true,
+			});
 			return res.status(201).send({
 				status: "success",
 				data: {

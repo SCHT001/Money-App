@@ -1,9 +1,11 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import api from "./routes/api";
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
 	return res.send("Server running...");
